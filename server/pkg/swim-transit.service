@@ -1,0 +1,13 @@
+[Unit]
+Description=Swim Transit
+Wants=network.target
+
+[Service]
+EnvironmentFile=-/etc/sysconfig/swim-transit
+ExecStart=/opt/swim-transit/bin/swim-transit
+User=swim-transit
+Restart=on-failure
+LimitNOFILE=65535
+
+[Install]
+WantedBy=multi-user.target
