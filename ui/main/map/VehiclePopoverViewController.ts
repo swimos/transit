@@ -12,10 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {NodeRef} from "@swim/client";
+import {Value} from "@swim/structure";
+import {MapDownlink, NodeRef} from "@swim/client";
 import {Color} from "@swim/color";
 import {PopoverView, PopoverViewController, HtmlView} from "@swim/view";
 import {VehicleInfo} from "./VehicleModel";
+import {ChartView, LineGraphView} from "@swim/chart";
 
 export class VehiclePopoverViewController extends PopoverViewController {
   /** @hidden */
@@ -24,6 +26,18 @@ export class VehiclePopoverViewController extends PopoverViewController {
   _nodeRef: NodeRef;
   /** @hidden */
   _colorRage: string[];
+  /** @hidden */
+  _speedChart: ChartView;
+  /** @hidden */
+  _linkSpeedHistory?: MapDownlink<Value, Value>;  
+  /** @hidden */
+  _speedPlot: any;
+  /** @hidden */
+  _linkAccelHistory?: MapDownlink<Value, Value>;  
+  /** @hidden */
+  _accelerationPlot: any;
+  /** @hidden */
+  _speedItem: any;
 
   constructor(info: VehicleInfo, nodeRef: NodeRef) {
     super();
@@ -48,6 +62,7 @@ export class VehiclePopoverViewController extends PopoverViewController {
         .padding(10)
         .backgroundColor(Color.parse("#071013").alpha(0.9))
         .backdropFilter("blur(2px)");
+
 
     const vehicle = this._info;
     const agencyIndex = vehicle.index%8;
@@ -90,31 +105,165 @@ export class VehiclePopoverViewController extends PopoverViewController {
     const placardSubheader = busPopover.append("div");
     placardSubheader.className("placardSubheader");
 
-    placardSubheader.append("div")
+    // speed
+    this._speedItem = placardSubheader.append("div")
       .text(`${vehicle.speed} km/h`)
-      .backgroundColor(colorAgency)
-      .className("placardSubheaderItem");
+      .backgroundColor(colorAgency);
+    this._speedItem.className("placardSubheaderItem");
 
+    // direction
     placardSubheader.append("div")
       .text(`${vehicle.dirId}`)
       .backgroundColor(colorAgency)
       .className("placardSubheaderItem");
 
+    // heading
     placardSubheader.append("div")
       .text(`${vehicle.heading}`)
       .backgroundColor(colorAgency)
       .className("placardSubheaderItem");
 
+    // route name
     busPopover.append("div").text(vehicle.routeTitle)
       .className("placard-route");
 
+    // agency name
     busPopover.append("div").text(vehicle.agency)
       .paddingTop(10)
-      .className("placard-route");
+      .className("placard-agency");
+
+    // start charts
+    const chartsContainer = busPopover.append("div");
+    chartsContainer.className('busCharts');
+
+    // speed chart title
+    const speedChartTitle = chartsContainer.append("h3").text("Speed");
+    speedChartTitle.className("chartTitle");
+
+    // chart container
+    const speedChartContainer = chartsContainer.append("div");
+    speedChartContainer.className('chartContainer');
+
+    // speed chart
+    const speedChartCanvas = speedChartContainer.append("canvas").height(200);
+    this._speedChart = new ChartView()
+      .bottomAxis("time")
+      .leftAxis("linear")
+      .bottomGesture(false)
+      .leftDomainPadding([0.1, 0.1])
+      .topGutter(0)
+      .rightGutter(0)
+      .bottomGutter(0)
+      .leftGutter(-1)
+      .domainColor(Color.transparent(0))
+      .tickMarkColor(Color.transparent(0));
+    
+    speedChartCanvas.append(this._speedChart);    
+
+    this._speedPlot = new LineGraphView()
+      .stroke(colorAgency)
+      .strokeWidth(1);
+
+    this._speedChart.addPlot(this._speedPlot);    
+    
+    // acceleration chart title
+    const accelChartTitle = chartsContainer.append("h3").text("Acceleration");
+    accelChartTitle.className("chartTitle");
+
+    // chart container
+    const accelChartContainer = chartsContainer.append("div");
+    accelChartContainer.className('chartContainer');
+
+    // speed chart
+    const accelChartCanvas = accelChartContainer.append("canvas").height(200);
+    const accelerationChart = new ChartView()
+      .bottomAxis("time")
+      .leftAxis("linear")
+      .bottomGesture(false)
+      .leftDomainPadding([0.1, 0.1])
+      .topGutter(0)
+      .rightGutter(0)
+      .bottomGutter(0)
+      .leftGutter(-1)
+      .domainColor(Color.transparent(0))
+      .tickMarkColor(Color.transparent(0));
+    
+      accelChartCanvas.append(accelerationChart);    
+
+    this._accelerationPlot = new LineGraphView()
+      .stroke(colorAgency)
+      .strokeWidth(1);
+
+    accelerationChart.addPlot(this._accelerationPlot);       
 
     // headerRow.append("span").key("routeTitle").text(vehicle.routeTitle);
 
     console.info('vehicle', vehicle);
     // TODO: layout popover
   }
+
+  popoverDidShow(view: any): void {
+    this.linkSpeedHistory();
+    this.linkAccelHistory();
+  }
+
+  popoverDidHide(view: any): void {
+    this.unlinkSpeedHistory();
+    this.unlinkAccelHistory();
+  }  
+
+  // speed history data handlers
+  protected linkSpeedHistory() {
+    if(!this._linkSpeedHistory) {
+      this._linkSpeedHistory = this._nodeRef.downlinkMap()
+        .nodeUri(this._info.uri)
+        .laneUri("speeds")
+        .didUpdate(this.didUpdateSpeedHistory.bind(this))
+        .didRemove(this.didRemoveSpeedHistory.bind(this))
+        .open();
+    }
+  }
+
+  protected unlinkSpeedHistory() {
+    if (this._linkSpeedHistory) {
+      this._linkSpeedHistory.close();
+      this._linkSpeedHistory = undefined;
+    }
+  }  
+
+  didUpdateSpeedHistory(k: Value, v: Value) {
+    this._speedItem.text(`${v.numberValue()} km/h`)
+    this._speedPlot.insertDatum({x: k.numberValue(), y: v.numberValue()});
+  }
+
+  didRemoveSpeedHistory(k: Value, v: Value) {
+    this._speedPlot.removeDatum({x: k.numberValue(), y: v.numberValue()});
+  }  
+
+  // acceleration history data handlers
+  protected linkAccelHistory() {
+    if(!this._linkAccelHistory) {
+      this._linkAccelHistory = this._nodeRef.downlinkMap()
+        .nodeUri(this._info.uri)
+        .laneUri("accelerations")
+        .didUpdate(this.didUpdateAccelHistory.bind(this))
+        .didRemove(this.didRemoveAccelHistory.bind(this))
+        .open();
+    }
+  }
+
+  protected unlinkAccelHistory() {
+    if (this._linkAccelHistory) {
+      this._linkAccelHistory.close();
+      this._linkAccelHistory = undefined;
+    }
+  }  
+
+  didUpdateAccelHistory(k: Value, v: Value) {
+    this._accelerationPlot.insertDatum({x: k.numberValue(), y: v.numberValue()});
+  }
+
+  didRemoveAccelHistory(k: Value, v: Value) {
+    this._accelerationPlot.removeDatum({x: k.numberValue(), y: v.numberValue()});
+  }    
 }
