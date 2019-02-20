@@ -19,6 +19,7 @@ import {SvgView, HtmlView, HtmlViewController} from "@swim/view";
 import {MapboxView} from "@swim/mapbox";
 import {TransitMapView} from "./map/TransitMapView";
 import {TransitMapViewController} from "./map/TransitMapViewController";
+import { Kpi1ViewController, Kpi2ViewController, Kpi3ViewController } from "./kpi";
 
 export class TransitViewController extends HtmlViewController {
   /** @hidden */
@@ -89,7 +90,7 @@ export class TransitViewController extends HtmlViewController {
         .backgroundColor(Color.parse("#070813").alpha(0.33))
         .backdropFilter("blur(2px)")
         .pointerEvents("auto");
-    const vehicleFlowKpiViewController = new HtmlViewController();
+    const vehicleFlowKpiViewController = new Kpi1ViewController(this._nodeRef, transitMapView);
     vehicleFlowKpi.setViewController(vehicleFlowKpiViewController);
 
     const vehicleBackupKpi = kpiStack.append("div")
@@ -100,7 +101,7 @@ export class TransitViewController extends HtmlViewController {
         .backgroundColor(Color.parse("#070813").alpha(0.33))
         .backdropFilter("blur(2px)")
         .pointerEvents("auto");
-    const vehicleBackupKpiViewController = new HtmlViewController();
+    const vehicleBackupKpiViewController = new Kpi2ViewController(this._nodeRef, transitMapView);
     vehicleBackupKpi.setViewController(vehicleBackupKpiViewController);
 
     const pedestrianBackupKpi = kpiStack.append("div")
@@ -111,7 +112,7 @@ export class TransitViewController extends HtmlViewController {
         .backgroundColor(Color.parse("#070813").alpha(0.33))
         .backdropFilter("blur(2px)")
         .pointerEvents("auto");
-    const pedestrianBackupKpiViewController = new HtmlViewController();
+    const pedestrianBackupKpiViewController = new Kpi3ViewController(this._nodeRef, transitMapView);
     pedestrianBackupKpi.setViewController(pedestrianBackupKpiViewController);
 
     return kpiStack;
