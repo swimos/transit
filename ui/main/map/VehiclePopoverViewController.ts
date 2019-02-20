@@ -14,19 +14,31 @@
 
 import {NodeRef} from "@swim/client";
 import {Color} from "@swim/color";
-import {PopoverView, PopoverViewController} from "@swim/view";
+import {PopoverView, PopoverViewController, HtmlView} from "@swim/view";
 import {VehicleInfo} from "./VehicleModel";
 
 export class VehiclePopoverViewController extends PopoverViewController {
-  /** @hodden */
+  /** @hidden */
   _info: VehicleInfo;
   /** @hidden */
   _nodeRef: NodeRef;
+  /** @hidden */
+  _colorRage: string[];
 
   constructor(info: VehicleInfo, nodeRef: NodeRef) {
     super();
     this._info = info;
     this._nodeRef = nodeRef;
+    this._colorRage = [
+      '#00A6ED',
+      '#7ED321',
+      '#57B8FF',
+      '#50E3C2',
+      '#C200FB',
+      '#5AFF15',
+      '#55DDE0',
+      '#F7AEF8'
+    ]
   }
 
   didSetView(view: PopoverView): void {
@@ -38,12 +50,71 @@ export class VehiclePopoverViewController extends PopoverViewController {
         .backdropFilter("blur(2px)");
 
     const vehicle = this._info;
+    const agencyIndex = vehicle.index%8;
+    const colorAgency = this._colorRage[agencyIndex];
     //const agency = vehicle.agencyInfo!;
 
-    const container = view.append("div").color("#ffffff");
+    // main container
+    const busPopover = view.append("div").color(Color.parse("#ffffff").alpha(0.9));
+    busPopover.className('busPopover');
 
-    container.append("span").key("routeTitle").text(vehicle.routeTitle);
+    // header
+    const placardHeader: HtmlView = busPopover.append("div").color(colorAgency);
+    placardHeader.className('placardHeader');
 
+    const ledIcon: HtmlView = placardHeader.append("div");
+    ledIcon.className('ledIcon');
+    ledIcon.backgroundColor(colorAgency);
+    
+    const ledLabel = ledIcon.append("h3").text(vehicle.routeTag);
+    ledLabel.className('ledLabel');
+
+    const placardLabel = placardHeader.append('h2');
+    placardLabel.className('placardLabel');
+    placardLabel.text(`bus #${vehicle.id}`);
+
+    const popoverMeter = placardHeader.append("div");
+    popoverMeter.className("popover-meter")
+    popoverMeter.borderColor(colorAgency)
+
+    const meterFill = popoverMeter.append("div");
+    meterFill.className('fill');
+    meterFill.backgroundColor(colorAgency)
+      .height(`${(vehicle.speed/130)*100}%`);
+
+    // add gap
+    busPopover.append("div")
+      .className("placardSubheader");
+
+    // subheader
+    const placardSubheader = busPopover.append("div");
+    placardSubheader.className("placardSubheader");
+
+    placardSubheader.append("div")
+      .text(`${vehicle.speed} km/h`)
+      .backgroundColor(colorAgency)
+      .className("placardSubheaderItem");
+
+    placardSubheader.append("div")
+      .text(`${vehicle.dirId}`)
+      .backgroundColor(colorAgency)
+      .className("placardSubheaderItem");
+
+    placardSubheader.append("div")
+      .text(`${vehicle.heading}`)
+      .backgroundColor(colorAgency)
+      .className("placardSubheaderItem");
+
+    busPopover.append("div").text(vehicle.routeTitle)
+      .className("placard-route");
+
+    busPopover.append("div").text(vehicle.agency)
+      .paddingTop(10)
+      .className("placard-route");
+
+    // headerRow.append("span").key("routeTitle").text(vehicle.routeTitle);
+
+    console.info('vehicle', vehicle);
     // TODO: layout popover
   }
 }
