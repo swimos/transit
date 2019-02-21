@@ -31,7 +31,7 @@ export abstract class KpiViewController extends HtmlViewController {
   _subtitle?: HtmlView;
 
   /** @hidden */
-  _pieView?: PieView;
+  _pieView: PieView;
 
   /** @hidden */
   _pieTitle?: TextRunView;
@@ -49,12 +49,12 @@ export abstract class KpiViewController extends HtmlViewController {
     return this._kpiTitle;
   }
 
-  get pieTitle(): HtmlView | undefined {
-    return this._kpiTitle;
+  get pieTitle(): TextRunView | undefined {
+    return this._pieTitle;
   }
 
-  get pieView(): HtmlView | undefined {
-    return this._kpiTitle;
+  get pieView(): PieView {
+    return this._pieView;
   }
 
   didSetView(view: HtmlView): void {

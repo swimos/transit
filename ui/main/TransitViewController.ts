@@ -36,34 +36,6 @@ export class TransitViewController extends HtmlViewController {
     this._map = null;
   }
 
-  protected linkAgencySpeed() {
-    if(!this._linkAgencySpeed) {
-      this._linkAgencySpeed = this._nodeRef.downlinkMap()
-        .nodeUri("/state/US/S-CA")
-        .laneUri("agencySpeed")
-        .didUpdate(this.didUpdateAgencySpeed.bind(this))
-        .didRemove(this.didRemoveAgencySpeed.bind(this))
-        .open();
-    }
-  }
-
-  protected unlinkAgencySpeed() {
-    if (this._linkAgencySpeed) {
-      this._linkAgencySpeed.close();
-      this._linkAgencySpeed = undefined;
-    }
-  }    
-
-  didUpdateAgencySpeed(k: Value, v: Value) {
-    console.info('didUpdateAgencySpeed', k, v);
-    // this._accelerationPlot.insertDatum({x: k.numberValue(), y: v.numberValue()});
-  }
-
-  didRemoveAgencySpeed(k: Value, v: Value) {
-    console.info('didRemoveAgencySpeed', k, v);
-    // this._accelerationPlot.removeDatum({x: k.numberValue(), y: v.numberValue()});
-  } 
-
   didSetView(view: HtmlView): void {
     this._map = new mapboxgl.Map({
       container: view.node,
@@ -97,7 +69,6 @@ export class TransitViewController extends HtmlViewController {
 
     view.append(this.createKpiStack(transitMapView));
     this.layoutKpiStack();
-    this.linkAgencySpeed();
   }
 
   viewDidResize(): void {
