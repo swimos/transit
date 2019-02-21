@@ -73,11 +73,11 @@ export class VehicleMapViewController extends MapGraphicViewController<VehicleMa
         .center(new LngLat(info.longitude, info.latitude))
         .radius(0)
         .fill(null)
-        .stroke(color.alpha(0.25))
+        .stroke(color.alpha(1))
         .strokeWidth(1);
     this.appendChildView(ripple);
     const radius = Math.min(this.bounds.width, this.bounds.height) / 8;
-    const tween = Transition.duration<any>(2000);
+    const tween = Transition.duration<any>(5000);
     ripple.stroke(color.alpha(0), tween)
           .radius(radius, tween.onEnd(function () { ripple.remove(); }));
   }
