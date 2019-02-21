@@ -13,8 +13,7 @@
 // limitations under the License.
 
 import * as mapboxgl from "mapbox-gl";
-import {Value} from "@swim/structure";
-import {MapDownlink, NodeRef} from "@swim/client";
+import {NodeRef} from "@swim/client";
 import {Color} from "@swim/color";
 import {SvgView, HtmlView, HtmlViewController} from "@swim/view";
 import {MapboxView} from "@swim/mapbox";
@@ -27,8 +26,6 @@ export class TransitViewController extends HtmlViewController {
   _nodeRef: NodeRef;
   /** @hidden */
   _map: mapboxgl.Map | null;
-  /** @hidden */
-  _linkAgencySpeed?: MapDownlink<Value, Value>;  
 
   constructor(nodeRef: NodeRef) {
     super();

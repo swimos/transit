@@ -12,24 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import { Value } from '@swim/structure';
+// import { Value } from '@swim/structure';
 import {NodeRef} from "@swim/client";
 import {Color} from "@swim/color";
 // import {Transition} from "@swim/transition";
 import {MapGraphicView} from "@swim/map";
-// import {IntersectionMapView} from "../map/IntersectionMapView";
+import {AgencyMapView} from "../map/AgencyMapView";
 import {KpiViewController} from "./KpiViewController";
 
 export class Kpi1ViewController extends KpiViewController {
   /** @hidden */
   _nodeRef: NodeRef;
   /** @hidden */
-  _trafficMapView: MapGraphicView;
+  _transitMapView: MapGraphicView;
 
-  constructor(nodeRef: NodeRef, trafficMapView: MapGraphicView) {
+  constructor(nodeRef: NodeRef, transitMapView: MapGraphicView) {
     super();
     this._nodeRef = nodeRef;
-    this._trafficMapView = trafficMapView;
+    this._transitMapView = transitMapView;
   }
 
   get primaryColor(): Color {
@@ -37,22 +37,23 @@ export class Kpi1ViewController extends KpiViewController {
   }
 
   updateKpi(): void {
-    this.linkData();
     this.kpiTitle!.text('speed (km/h)');
     // let meterValue = 0;
     // let spaceValue = 0;
-    // const intersectionMapViews = this._trafficMapView.childViews;
-    // for (let i = 0; i < intersectionMapViews.length; i += 1) {
-    //   const intersectionMapView = intersectionMapViews[i];
-    //   if (intersectionMapView instanceof IntersectionMapView && !intersectionMapView.culled) {
-    //     const intersectionMapViewController = intersectionMapView.viewController!;
+    const agencyMapViews = this._transitMapView.childViews;
+    console.log('agencyMapViews: ', agencyMapViews);
+    for (let i = 0; i < agencyMapViews.length; i += 1) {
+      const agencyMapView = agencyMapViews[i];
+      if (agencyMapView instanceof AgencyMapView ) {
+        const agencyMapViewController = agencyMapView.viewController!;
+        console.log('agencyMapViewController: ', agencyMapViewController);
     //     if (intersectionMapViewController._pedCall) {
     //       meterValue += 1;
     //     } else {
     //       spaceValue += 1;
     //     }
-    //   }
-    // }
+      }
+    }
 
     // const title = this.titleView;
     // const meter = this.meterView;
@@ -67,17 +68,6 @@ export class Kpi1ViewController extends KpiViewController {
     // this.meterLegend!.text("Waiting (" + meterValue + ")");
     // this.clearLegend!.text("Clear (" + spaceValue + ")");
     // title.text(Math.round(100 * meterValue / ((meterValue + spaceValue) || 1)) + "%");
-  }
-
-  updateData(k: Value, v: Value) {
-    // console.log('k: ', k, ' v: ', v);
-  }
-
-  protected linkData() {
-    this._nodeRef.downlinkMap()
-      .laneUri("agencySpeed")
-      .didUpdate(this.updateData.bind(this))
-      .open();
   }
 
 }

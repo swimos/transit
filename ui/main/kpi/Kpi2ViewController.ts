@@ -39,7 +39,7 @@ export class Kpi2ViewController extends KpiViewController {
 
   updateKpi(): void {
     // console.info('Update KPI');
-    this.linkData();
+    // this.linkData();
     this.kpiTitle!.text('speed (km/h)');
 
   }
@@ -70,7 +70,7 @@ export class Kpi2ViewController extends KpiViewController {
             .legend(id);
         pie.setChildView(id, slice);
       }
-    }    
+    }
   }
 
   protected linkData() {

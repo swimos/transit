@@ -101,7 +101,7 @@ export abstract class KpiViewController extends HtmlViewController {
     // force resize after flexbox layout
     requestAnimationFrame(function () { view.cascadeResize(); });
 
-    // this._updateTimer = setInterval(this.updateKpi.bind(this), 1000) as any;
+    this._updateTimer = setInterval(this.updateKpi.bind(this), 1000) as any;
     this.updateKpi();
   }
 

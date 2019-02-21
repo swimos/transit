@@ -34,4 +34,12 @@ export class AgencyMapView extends MapGraphicView {
   protected onAnimate(t: number): void {
     // don't compute auto hitBounds
   }
+
+  // protected onCull(): void {
+  //   super.onCull();
+  //   if (this._hitBounds === null) {
+  //     this.setCulled(true);
+  //   }
+  // }
+
 }
