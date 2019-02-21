@@ -13,6 +13,8 @@
 
 ### Windows
 
+Install the [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10).
+
 Execute the command `.\run.bat` from a console pointed to the application's home directory. This will start a Swim server, seeded with the application's logic, on port 9002.
    ```console
     user@machine:~$ .\run.bat
