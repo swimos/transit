@@ -198,7 +198,7 @@ export class VehiclePopoverViewController extends PopoverViewController {
 
     // headerRow.append("span").key("routeTitle").text(vehicle.routeTitle);
 
-    console.info('vehicle', vehicle);
+    //console.info('vehicle', vehicle);
     // TODO: layout popover
   }
 

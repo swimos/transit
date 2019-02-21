@@ -17,7 +17,7 @@ import {NodeRef} from "@swim/client";
 import {Color} from "@swim/color";
 // import {Transition} from "@swim/transition";
 import {MapGraphicView} from "@swim/map";
-import {AgencyMapView} from "../map/AgencyMapView";
+//import {AgencyMapView} from "../map/AgencyMapView";
 import {KpiViewController} from "./KpiViewController";
 
 export class Kpi1ViewController extends KpiViewController {
@@ -40,20 +40,20 @@ export class Kpi1ViewController extends KpiViewController {
     this.kpiTitle!.text('speed (km/h)');
     // let meterValue = 0;
     // let spaceValue = 0;
-    const agencyMapViews = this._transitMapView.childViews;
-    console.log('agencyMapViews: ', agencyMapViews);
-    for (let i = 0; i < agencyMapViews.length; i += 1) {
-      const agencyMapView = agencyMapViews[i];
-      if (agencyMapView instanceof AgencyMapView ) {
-        const agencyMapViewController = agencyMapView.viewController!;
-        console.log('agencyMapViewController: ', agencyMapViewController);
+    //const agencyMapViews = this._transitMapView.childViews;
+    //console.log('agencyMapViews: ', agencyMapViews);
+    //for (let i = 0; i < agencyMapViews.length; i += 1) {
+    //  const agencyMapView = agencyMapViews[i];
+    //  if (agencyMapView instanceof AgencyMapView ) {
+    //    const agencyMapViewController = agencyMapView.viewController!;
+    //    //console.log('agencyMapViewController: ', agencyMapViewController);
     //     if (intersectionMapViewController._pedCall) {
     //       meterValue += 1;
     //     } else {
     //       spaceValue += 1;
     //     }
-      }
-    }
+    //  }
+    //}
 
     // const title = this.titleView;
     // const meter = this.meterView;

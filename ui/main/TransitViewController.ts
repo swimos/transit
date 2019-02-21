@@ -15,7 +15,7 @@
 import * as mapboxgl from "mapbox-gl";
 import {NodeRef} from "@swim/client";
 import {Color} from "@swim/color";
-import {SvgView, HtmlView, HtmlViewController} from "@swim/view";
+import {SvgView, HtmlView, HtmlViewController, CanvasView} from "@swim/view";
 import {MapboxView} from "@swim/mapbox";
 import {TransitMapView} from "./map/TransitMapView";
 import {TransitMapViewController} from "./map/TransitMapViewController";
@@ -26,11 +26,18 @@ export class TransitViewController extends HtmlViewController {
   _nodeRef: NodeRef;
   /** @hidden */
   _map: mapboxgl.Map | null;
+  /** @hidden */
+  _canvasView: CanvasView | null;
 
   constructor(nodeRef: NodeRef) {
     super();
     this._nodeRef = nodeRef;
     this._map = null;
+    this._canvasView = null;
+  }
+
+  get canvasView(): CanvasView | null {
+    return this._canvasView;
   }
 
   didSetView(view: HtmlView): void {
@@ -43,7 +50,7 @@ export class TransitViewController extends HtmlViewController {
     });
 
     const mapboxView = new MapboxView(this._map);
-    mapboxView.overlayCanvas();
+    this._canvasView = mapboxView.overlayCanvas();
 
     const transitMapView = new TransitMapView();
     const transitMapViewController = new TransitMapViewController(this._nodeRef);
