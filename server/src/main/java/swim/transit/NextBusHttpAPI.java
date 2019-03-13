@@ -15,6 +15,7 @@
 package swim.transit;
 
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Iterator;
@@ -112,7 +113,7 @@ public class NextBusHttpAPI {
         final Item item = it.next();
         final Value header = item.getAttr("vehicle");
         if (header.isDefined()) {
-          final String id = header.get("id").stringValue();
+          final String id = header.get("id").stringValue().trim();
           final String routeTag = header.get("routeTag").stringValue();
           final float latitude = header.get("lat").floatValue(0.0f);
           final float longitude = header.get("lon").floatValue(0.0f);
@@ -145,17 +146,27 @@ public class NextBusHttpAPI {
           } else if (293 <= headingInt && headingInt < 338) {
             heading = "SE";
           }
-          final String uri = "/vehicle/" + ag.getCountry() + "/" + ag.getState() + "/" + ag.getId() + "/" + id;
-          final Vehicle vehicle = new Vehicle().withId(id).withUri(uri).withDirId(dirId).withIndex(ag.getIndex())
-              .withLatitude(latitude).withLongitude(longitude).withRouteTag(routeTag).withSecsSinceReport(secsSinceReport)
-              .withSpeed(speed).withHeading(heading);
-          vehicles.add(vehicle);
+          final String uri = parseUri("/vehicle/" + ag.getCountry() + "/" + ag.getState() + "/" + ag.getId() + "/" + id);
+          if (uri != null) {
+            final Vehicle vehicle = new Vehicle().withId(id).withUri(uri).withDirId(dirId).withIndex(ag.getIndex())
+                .withLatitude(latitude).withLongitude(longitude).withRouteTag(routeTag).withSecsSinceReport(secsSinceReport)
+                .withSpeed(speed).withHeading(heading);
+            vehicles.add(vehicle);
+          }
         }
       }
       return vehicles;
     } catch (Exception e) {
     }
     return null;
+  }
+
+  private String parseUri(String uri) {
+    try {
+      return java.net.URLEncoder.encode(uri, "UTF-8").toString();
+    } catch (UnsupportedEncodingException e) {
+      return null;
+    }
   }
 
   private Value parse(URL url) {
