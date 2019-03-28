@@ -175,7 +175,7 @@ public class NextBusHttpAPI {
       urlConnection = (HttpURLConnection) url.openConnection();
       urlConnection.setRequestProperty("Accept-Encoding", "gzip, deflate");
       final InputStream stream = new GZIPInputStream(urlConnection.getInputStream());
-      final Value configValue = Utf8.read(Xml.modelParser().documentParser(), stream);
+      final Value configValue = Utf8.read(Xml.structureParser().documentParser(), stream);
       return configValue;
     } catch (Throwable e) {
       e.printStackTrace();
