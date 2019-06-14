@@ -13,8 +13,9 @@
 // limitations under the License.
 
 open module swim.transit {
-  requires transitive swim.loader;
-  requires transitive swim.xml;
+  requires swim.xml;
+  requires transitive swim.server;
+  requires swim.loader;
 
   exports swim.transit;
   exports swim.transit.model;
