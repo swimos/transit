@@ -23,18 +23,17 @@ import swim.api.lane.ValueLane;
 import swim.transit.model.Vehicle;
 
 public class VehicleAgent extends AbstractAgent {
-
   private long lastReportedTime = 0L;
 
   @SwimLane("vehicle")
   public ValueLane<Vehicle> vehicle;
 
-  @SwimLane("speeds")
   @SwimTransient
+  @SwimLane("speeds")
   public MapLane<Long, Integer> speeds;
 
-  @SwimLane("accelerations")
   @SwimTransient
+  @SwimLane("accelerations")
   public MapLane<Long, Integer> accelerations;
 
   @SwimLane("addVehicle")

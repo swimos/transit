@@ -21,12 +21,11 @@ import java.util.List;
 import java.util.Scanner;
 import swim.api.SwimAgent;
 import swim.api.SwimRoute;
-import swim.api.agent.AgentType;
+import swim.api.agent.AgentRoute;
+import swim.api.kernel.Kernel;
 import swim.api.plane.AbstractPlane;
-import swim.api.plane.PlaneContext;
 import swim.api.ref.SwimRef;
-import swim.api.server.ServerContext;
-import swim.loader.ServerLoader;
+import swim.server.ServerLoader;
 import swim.transit.agent.AgencyAgent;
 import swim.transit.agent.CountryAgent;
 import swim.transit.agent.StateAgent;
@@ -34,32 +33,32 @@ import swim.transit.agent.VehicleAgent;
 import swim.transit.model.Agency;
 
 public class TransitPlane extends AbstractPlane {
-
-  @SwimAgent(name = "country")
+  @SwimAgent("country")
   @SwimRoute("/country/:id")
-  final AgentType<?> transitAgent = agentClass(CountryAgent.class);
+  AgentRoute<CountryAgent> transitAgent;
 
-  @SwimAgent(name = "state")
+  @SwimAgent("state")
   @SwimRoute("/state/:country/:state")
-  final AgentType<?> stateAgent = agentClass(StateAgent.class);
+  AgentRoute<StateAgent> stateAgent;
 
-  @SwimAgent(name = "agency")
+  @SwimAgent("agency")
   @SwimRoute("/agency/:country/:state/:id")
-  final AgentType<?> agencyAgent = agentClass(AgencyAgent.class);
+  AgentRoute<AgencyAgent> agencyAgent;
 
-  @SwimAgent(name = "vehicle")
+  @SwimAgent("vehicle")
   @SwimRoute("/vehicle/:country/:state/:agency/:id")
-  final AgentType<?> vehicleAgent = agentClass(VehicleAgent.class);
+  AgentRoute<VehicleAgent> vehicleAgent;
 
-  public static void main(String[] args) throws IOException {
-    final ServerContext server = ServerLoader.load(TransitPlane.class.getModule()).serverContext();
-    final PlaneContext plane = server.getPlane("transit").planeContext();
+  public static void main(String[] args) {
+    final Kernel kernel = ServerLoader.loadServer();
+    final TransitPlane plane = kernel.getPlane("transit");
 
-    server.start();
+    kernel.start();
     System.out.println("Running TransitPlane...");
 
-    server.run(); // blocks until termination
     startAgencies(plane);
+
+    kernel.run(); // blocks until termination
   }
 
   private static void startAgencies(SwimRef swim) {

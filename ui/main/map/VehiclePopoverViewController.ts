@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Value} from "@swim/structure";
+import {AnyValue, Value} from "@swim/structure";
 import {MapDownlink, NodeRef} from "@swim/client";
 import {Color} from "@swim/color";
 import {PopoverView, PopoverViewController, HtmlView} from "@swim/view";
@@ -29,11 +29,11 @@ export class VehiclePopoverViewController extends PopoverViewController {
   /** @hidden */
   _speedChart: ChartView;
   /** @hidden */
-  _linkSpeedHistory?: MapDownlink<Value, Value>;  
+  _linkSpeedHistory?: MapDownlink<Value, Value, AnyValue, AnyValue>;
   /** @hidden */
   _speedPlot: any;
   /** @hidden */
-  _linkAccelHistory?: MapDownlink<Value, Value>;  
+  _linkAccelHistory?: MapDownlink<Value, Value, AnyValue, AnyValue>;
   /** @hidden */
   _accelerationPlot: any;
   /** @hidden */

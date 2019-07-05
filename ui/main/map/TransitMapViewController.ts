@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Value} from "@swim/structure";
+import {AnyValue, Value} from "@swim/structure";
 import {MapDownlink, NodeRef} from "@swim/client";
 import {MapGraphicViewController} from "@swim/map";
 import {TransitMapView} from "./TransitMapView";
@@ -24,7 +24,7 @@ export class TransitMapViewController extends MapGraphicViewController<TransitMa
   /** @hidden */
   _nodeRef: NodeRef;
   /** @hidden */
-  _agenciesLink: MapDownlink<Value, Value> | null;
+  _agenciesLink: MapDownlink<Value, Value, AnyValue, AnyValue> | null;
 
   constructor(nodeRef: NodeRef) {
     super();

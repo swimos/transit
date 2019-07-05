@@ -29,20 +29,19 @@ import swim.transit.model.Agency;
 import swim.transit.model.Vehicle;
 
 public class StateAgent extends AbstractAgent {
-
   @SwimLane("count")
   public ValueLane<Value> count;
 
-  @SwimLane("agencyCount")
   @SwimTransient
+  @SwimLane("agencyCount")
   public MapLane<Agency, Integer> agencyCount;
 
   @SwimLane("joinAgencyCount")
   public JoinValueLane<Agency, Integer> joinAgencyCount = this.<Agency, Integer>joinValueLane()
       .didUpdate(this::updateCounts);
 
-  @SwimLane("vehicles")
   @SwimTransient
+  @SwimLane("vehicles")
   public MapLane<String, Vehicle> vehicles;
 
   @SwimLane("joinAgencyVehicles")
@@ -53,8 +52,8 @@ public class StateAgent extends AbstractAgent {
   @SwimLane("speed")
   public ValueLane<Float> speed;
 
-  @SwimLane("agencySpeed")
   @SwimTransient
+  @SwimLane("agencySpeed")
   public MapLane<Agency, Float> agencySpeed;
 
   @SwimLane("joinStateSpeed")

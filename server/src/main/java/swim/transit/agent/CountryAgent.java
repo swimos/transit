@@ -27,7 +27,6 @@ import swim.transit.model.Agency;
 import swim.uri.Uri;
 
 public class CountryAgent extends AbstractAgent {
-
   @SwimLane("count")
   public ValueLane<Value> count;
 

@@ -31,9 +31,8 @@ import swim.transit.model.Vehicle;
 import swim.transit.model.Vehicles;
 
 public class AgencyAgent extends AbstractAgent {
-
-  @SwimLane("vehicles")
   @SwimTransient
+  @SwimLane("vehicles")
   public MapLane<String, Vehicle> vehicles;
 
   @SwimLane("count")

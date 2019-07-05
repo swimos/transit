@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import {Value} from "@swim/structure";
+import {AnyValue, Value} from "@swim/structure";
 import {MapDownlink, ValueDownlink, NodeRef} from "@swim/client";
 import {Length} from "@swim/length";
 import {Color} from "@swim/color";
@@ -34,9 +34,9 @@ export class AgencyMapViewController extends MapGraphicViewController<AgencyMapV
   /** @hidden */
   _nodeRef: NodeRef;
   /** @hidden */
-  _boundingBoxLink: ValueDownlink<Value> | null;
+  _boundingBoxLink: ValueDownlink<Value, AnyValue> | null;
   /** @hidden */
-  _vehiclesLink: MapDownlink<Value, Value> | null;
+  _vehiclesLink: MapDownlink<Value, Value, AnyValue, AnyValue> | null;
   /** @hidden */
   _popoverView: PopoverView | null;
   /** @hidden*/
