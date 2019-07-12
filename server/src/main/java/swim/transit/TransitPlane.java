@@ -22,9 +22,10 @@ import java.util.Scanner;
 import swim.api.SwimAgent;
 import swim.api.SwimRoute;
 import swim.api.agent.AgentRoute;
-import swim.api.kernel.Kernel;
 import swim.api.plane.AbstractPlane;
 import swim.api.ref.SwimRef;
+import swim.fabric.Fabric;
+import swim.kernel.Kernel;
 import swim.server.ServerLoader;
 import swim.transit.agent.AgencyAgent;
 import swim.transit.agent.CountryAgent;
@@ -51,12 +52,12 @@ public class TransitPlane extends AbstractPlane {
 
   public static void main(String[] args) {
     final Kernel kernel = ServerLoader.loadServer();
-    final TransitPlane plane = kernel.getPlane("transit");
+    final Fabric fabric = (Fabric) kernel.getSpace("transit");
 
     kernel.start();
     System.out.println("Running TransitPlane...");
 
-    startAgencies(plane);
+    startAgencies(fabric);
 
     kernel.run(); // blocks until termination
   }
