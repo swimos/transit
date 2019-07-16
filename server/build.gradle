@@ -112,7 +112,6 @@ afterEvaluate {
     doFirst {
       jvmArgs += [
         '--module-path', files(configurations.runtimeClasspath, jar.archivePath).asPath,
-        '--add-modules', 'swim.store.db,swim.reflect',
         '--module', "${moduleName}/${mainClassName}",
       ]
       classpath = files()
@@ -122,12 +121,11 @@ afterEvaluate {
   startScripts {
     inputs.property("moduleName", moduleName)
     doFirst {
-      classpath = files()
       defaultJvmOpts = [
         '--module-path', 'APP_HOME_LIBS',
-        '--add-modules', 'swim.store.db,swim.reflect',
         '--module', "${moduleName}/${mainClassName}",
       ]
+      classpath = files()
     }
     doLast {
       def bashFile = new File(outputDir, applicationName)
