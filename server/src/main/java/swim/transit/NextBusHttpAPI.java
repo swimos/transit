@@ -68,7 +68,7 @@ public class NextBusHttpAPI {
 
   private void sendRoutes(Agency agency) {
     final Routes routes = getRoutes(agency);
-    if (routes != null) {
+    if (routes != null && !routes.getRoutes().isEmpty()) {
       final Value value = Form.forClass(Routes.class).mold(routes).toValue();
       swim.command(agency.getUri(), "addRoutes", value);
     }
