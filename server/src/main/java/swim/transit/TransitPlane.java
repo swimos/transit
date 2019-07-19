@@ -82,7 +82,7 @@ public class TransitPlane extends AbstractPlane {
     InputStream is = null;
     Scanner scanner = null;
     try {
-      is = TransitPlane.class.getModule().getResourceAsStream("/agencies.csv");
+      is = TransitPlane.class.getResourceAsStream("/agencies.csv");
       scanner = new Scanner(is, "UTF-8");
       int index = 0;
       while (scanner.hasNextLine()) {
