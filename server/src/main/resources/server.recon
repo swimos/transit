@@ -3,22 +3,22 @@
 
 transit: @fabric {
   @plane(class: "swim.transit.TransitPlane")
-  @node {
-    pattern: "/country/:id"
-    @agent(class: "swim.transit.agent.CountryAgent")
-  }
-  @node {
-    pattern: "/state/:country/:state"
-    @agent(class: "swim.transit.agent.StateAgent")
-  }
-  @node {
-    pattern: "/agency/:country/:state/:id"
-    @agent(class: "swim.transit.agent.AgencyAgent")
-  }
-  @node {
-    pattern: "/vehicle/:country/:state/:agency/:id"
-    @agent(class: "swim.transit.agent.VehicleAgent")
-  }
+  #@node {
+  #  pattern: "/country/:id"
+  #  @agent(class: "swim.transit.agent.CountryAgent")
+  #}
+  #@node {
+  #  pattern: "/state/:country/:state"
+  #  @agent(class: "swim.transit.agent.StateAgent")
+  #}
+  #@node {
+  #  pattern: "/agency/:country/:state/:id"
+  #  @agent(class: "swim.transit.agent.AgencyAgent")
+  #}
+  #@node {
+  #  pattern: "/vehicle/:country/:state/:agency/:id"
+  #  @agent(class: "swim.transit.agent.VehicleAgent")
+  #}
   @store {
     path: "/tmp/swim-transit/"
   }
