@@ -117,6 +117,7 @@ afterEvaluate {
         classpath = files()
       }
     }
+    systemProperties = System.getProperties()
   }
 
   startScripts {
