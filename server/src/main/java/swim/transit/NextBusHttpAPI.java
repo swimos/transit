@@ -146,7 +146,7 @@ public class NextBusHttpAPI {
           } else if (293 <= headingInt && headingInt < 338) {
             heading = "SE";
           }
-          final String uri = parseUri("/vehicle/" + ag.getCountry() + "/" + ag.getState() + "/" + ag.getId() + "/" + id);
+          final String uri = "/vehicle/" + ag.getCountry() + "/" + ag.getState() + "/" + ag.getId() + "/" + parseUri(id);
           if (uri != null) {
             final Vehicle vehicle = new Vehicle().withId(id).withUri(uri).withDirId(dirId).withIndex(ag.getIndex())
                 .withLatitude(latitude).withLongitude(longitude).withRouteTag(routeTag).withSecsSinceReport(secsSinceReport)
