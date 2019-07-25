@@ -48,7 +48,7 @@ public class VehicleAgent extends AbstractAgent {
       speeds.drop(speeds.size() - 10);
     }
     if (lastReportedTime > 0) {
-      final float acceleration = (float) ((v.getSpeed() - oldSpeed)) / ((time - lastReportedTime) / 3600);
+      final float acceleration = (float) ((v.getSpeed() - oldSpeed)) / (time - lastReportedTime) * 3600;
       accelerations.put(time, Math.round(acceleration));
       if (accelerations.size() > 10) {
         accelerations.drop(accelerations.size() - 10);
