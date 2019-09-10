@@ -7,7 +7,7 @@ WORKDIR /
 EXPOSE 9005
 
 COPY dist/swim-transit-3.10.0 /app/swim-transit-3.10.0/
-COPY server/ui/ /app/swim-transit-3.10.0/ui
+COPY dist/ui/ /app/swim-transit-3.10.0/ui
 
 WORKDIR /app/swim-transit-3.10.0
 ENTRYPOINT ["./bin/swim-transit"]
