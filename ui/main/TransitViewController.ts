@@ -71,12 +71,12 @@ export class TransitViewController extends HtmlViewController {
         .height(68);
     logo.append(this.createLogo());
 
-    view.append(this.createKpiStack(transitMapView));
-    this.layoutKpiStack();
+    // view.append(this.createKpiStack(transitMapView));
+    // this.layoutKpiStack();
   }
 
   viewDidResize(): void {
-    this.layoutKpiStack();
+    // this.layoutKpiStack();
   }
 
   protected createKpiStack(transitMapView: TransitMapView): HtmlView {

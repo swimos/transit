@@ -1,6 +1,6 @@
 #Dockerfile
 
-FROM openjdk:11-jdk-stretch
+FROM openjdk:11-jre-stretch
 
 WORKDIR /
 
