@@ -22,7 +22,11 @@ import swim.api.agent.AbstractAgent;
 import swim.api.lane.CommandLane;
 import swim.api.lane.MapLane;
 import swim.api.lane.ValueLane;
+import swim.concurrent.AbstractTask;
+import swim.concurrent.TaskRef;
+import swim.concurrent.TimerRef;
 import swim.structure.Value;
+import swim.transit.NextBusHttpAPI;
 import swim.transit.model.Agency;
 import swim.transit.model.BoundingBox;
 import swim.transit.model.Route;
@@ -103,7 +107,11 @@ public class AgencyAgent extends AbstractAgent {
   public CommandLane<Agency> addInfo = this.<Agency>commandLane().onCommand(this::onInfo);
 
   @SwimLane("info")
-  public ValueLane<Agency> info;
+  public ValueLane<Agency> info = this.<Agency>valueLane()
+    .didSet((n, o) -> {
+      abortPoll();
+      startPoll(n);
+    });
 
   private void onInfo(Agency agency) {
     final Value agencyValue = agency.toValue().unflattened().slot("agencyUri", this.nodeUri().toString());
@@ -123,6 +131,51 @@ public class AgencyAgent extends AbstractAgent {
     }
   }
 
+  private TaskRef pollVehicleInfo;
+
+  private TimerRef timer;
+
+  private void startPoll(final Agency ag) {
+    abortPoll();
+
+    // Define task
+    this.pollVehicleInfo = asyncStage().task(new AbstractTask() {
+
+      final Agency agency = ag;
+      final String url = String.format("http://webservices.nextbus.com//service/publicXMLFeed?command=vehicleLocations&a=%s&t=0",
+        ag.getId());
+
+      @Override
+      public void runTask() {
+        NextBusHttpAPI.sendVehicleInfo(this.url, this.agency, AgencyAgent.this.context);
+      }
+
+      @Override
+      public boolean taskWillBlock() {
+        return true;
+      }
+    });
+
+    // Define timer to periodically reschedule task
+    if (this.pollVehicleInfo != null) {
+      this.timer = setTimer(1000, () -> {
+        this.pollVehicleInfo.cue();
+        this.timer.reschedule(POLL_INTERVAL);
+      });
+    }
+  }
+
+  private void abortPoll() {
+    if (this.pollVehicleInfo != null) {
+      this.pollVehicleInfo.cancel();
+      this.pollVehicleInfo = null;
+    }
+    if (this.timer != null) {
+      this.timer.cancel();
+      this.timer = null;
+    }
+  }
+
   @Override
   public void didStart() {
     vehicles.clear();
@@ -130,4 +183,12 @@ public class AgencyAgent extends AbstractAgent {
     vehiclesCount.set(0);
     System.out.println("Started Agent: " + nodeUri().toString());
   }
+
+  @Override
+  public void willStop() {
+    abortPoll();
+    super.willStop();
+  }
+
+  private static final long POLL_INTERVAL = 10000L;
 }

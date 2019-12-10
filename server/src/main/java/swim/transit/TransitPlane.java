@@ -24,7 +24,7 @@ import swim.api.SwimRoute;
 import swim.api.agent.AgentRoute;
 import swim.api.plane.AbstractPlane;
 import swim.api.ref.SwimRef;
-import swim.fabric.Fabric;
+import swim.api.space.Space;
 import swim.kernel.Kernel;
 import swim.server.ServerLoader;
 import swim.transit.agent.AgencyAgent;
@@ -52,12 +52,12 @@ public class TransitPlane extends AbstractPlane {
 
   public static void main(String[] args) {
     final Kernel kernel = ServerLoader.loadServer();
-    final Fabric fabric = (Fabric) kernel.getSpace("transit");
+    final Space space = kernel.getSpace("transit");
 
     kernel.start();
     System.out.println("Running TransitPlane...");
 
-    startAgencies(fabric);
+    startAgencies(space);
 
     kernel.run(); // blocks until termination
   }
@@ -72,9 +72,7 @@ public class TransitPlane extends AbstractPlane {
     } catch (InterruptedException e) {
 
     }
-    final NextBusHttpAPI nextBusHttpAPI = new NextBusHttpAPI(swim);
-    nextBusHttpAPI.sendRoutes(agencies);
-    nextBusHttpAPI.repeatSendVehicleInfo(agencies);
+    NextBusHttpAPI.sendRoutes(agencies, swim);
   }
 
   private static List<Agency> loadAgencies() {

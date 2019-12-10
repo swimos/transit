@@ -20,9 +20,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import java.util.zip.GZIPInputStream;
 import swim.api.ref.SwimRef;
 import swim.codec.Utf8;
@@ -38,35 +35,23 @@ import swim.xml.Xml;
 
 public class NextBusHttpAPI {
 
-  private final SwimRef swim;
+  private NextBusHttpAPI() { }
 
-  public NextBusHttpAPI(SwimRef swim) {
-    this.swim = swim;
-  }
-
-  public void repeatSendVehicleInfo(List<Agency> agencies) {
-    for (Agency agency : agencies) {
-      final ScheduledExecutorService run = Executors.newSingleThreadScheduledExecutor();
-      run.scheduleAtFixedRate(() -> sendVehicleInfo(agency),
-          10 + agency.getIndex(), 10, TimeUnit.SECONDS);
-    }
-  }
-
-  public void sendRoutes(List<Agency> agencies) {
+  public static void sendRoutes(List<Agency> agencies, SwimRef swim) {
     for (Agency agency: agencies) {
-      sendRoutes(agency);
+      sendRoutes(agency, swim);
     }
   }
 
-  private void sendVehicleInfo(Agency ag) {
-    final Vehicles vehicles = getVehicleLocations(ag);
+  public static void sendVehicleInfo(String pollUrl, Agency ag, SwimRef swim) {
+    final Vehicles vehicles = getVehicleLocations(pollUrl, ag);
     if (vehicles != null && vehicles.getVehicles().size() > 0) {
       final Value value = Form.forClass(Vehicles.class).mold(vehicles).toValue();
       swim.command(ag.getUri(), "addVehicles", value);
     }
   }
 
-  private void sendRoutes(Agency agency) {
+  private static void sendRoutes(Agency agency, SwimRef swim) {
     final Routes routes = getRoutes(agency);
     if (routes != null && !routes.getRoutes().isEmpty()) {
       final Value value = Form.forClass(Routes.class).mold(routes).toValue();
@@ -74,7 +59,7 @@ public class NextBusHttpAPI {
     }
   }
 
-  private Routes getRoutes(Agency ag) {
+  private static Routes getRoutes(Agency ag) {
     try {
       final URL url = new URL(String.format(
           "http://webservices.nextbus.com//service/publicXMLFeed?command=routeList&a=%s", ag.getId()));
@@ -98,10 +83,9 @@ public class NextBusHttpAPI {
     return null;
   }
 
-  private Vehicles getVehicleLocations(Agency ag) {
+  public static Vehicles getVehicleLocations(String pollUrl, Agency ag) {
     try {
-      final URL url = new URL(String.format(
-          "http://webservices.nextbus.com//service/publicXMLFeed?command=vehicleLocations&a=%s&t=0", ag.getId()));
+      final URL url = new URL(pollUrl);
       final Value vehicleLocs = parse(url);
       if (!vehicleLocs.isDefined()) {
         return null;
@@ -147,12 +131,10 @@ public class NextBusHttpAPI {
             heading = "SE";
           }
           final String uri = "/vehicle/" + ag.getCountry() + "/" + ag.getState() + "/" + ag.getId() + "/" + parseUri(id);
-          if (uri != null) {
-            final Vehicle vehicle = new Vehicle().withId(id).withUri(uri).withDirId(dirId).withIndex(ag.getIndex())
-                .withLatitude(latitude).withLongitude(longitude).withRouteTag(routeTag).withSecsSinceReport(secsSinceReport)
-                .withSpeed(speed).withHeading(heading);
-            vehicles.add(vehicle);
-          }
+          final Vehicle vehicle = new Vehicle().withId(id).withUri(uri).withDirId(dirId).withIndex(ag.getIndex())
+              .withLatitude(latitude).withLongitude(longitude).withRouteTag(routeTag).withSecsSinceReport(secsSinceReport)
+              .withSpeed(speed).withHeading(heading);
+          vehicles.add(vehicle);
         }
       }
       return vehicles;
@@ -161,7 +143,7 @@ public class NextBusHttpAPI {
     return null;
   }
 
-  private String parseUri(String uri) {
+  private static String parseUri(String uri) {
     try {
       return java.net.URLEncoder.encode(uri, "UTF-8").toString();
     } catch (UnsupportedEncodingException e) {
@@ -169,7 +151,7 @@ public class NextBusHttpAPI {
     }
   }
 
-  private Value parse(URL url) {
+  private static Value parse(URL url) {
     final HttpURLConnection urlConnection;
     try {
       urlConnection = (HttpURLConnection) url.openConnection();
