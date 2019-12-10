@@ -11,7 +11,7 @@ cd ../server
 ./gradlew build
 
 cd ../
-tar -xf server/build/distributions/swim-transit-3.10.0.tar -C dist/
+tar -xf server/build/distributions/swim-transit-3.11.0-SNAPSHOT.tar -C dist/
 
 
 # sudo docker build ./ -f ./java.Dockerfile -t swimdatafabric/transit:1.0
