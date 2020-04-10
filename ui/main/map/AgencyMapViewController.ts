@@ -18,7 +18,7 @@ import {Length} from "@swim/length";
 import {Color} from "@swim/color";
 import {Transition} from "@swim/transition";
 import {PopoverView} from "@swim/view";
-import {LngLat, MapProjection, MapGraphicViewController, MapCircleView} from "@swim/map";
+import {LngLat, MapViewContext, MapGraphicViewController, MapCircleView} from "@swim/map";
 import {AgencyInfo, AgencyBoundingBox} from "./AgencyModel";
 import {AgencyMapView} from "./AgencyMapView";
 import {AgencyPopoverViewController} from "./AgencyPopoverViewController";
@@ -56,7 +56,7 @@ export class AgencyMapViewController extends MapGraphicViewController<AgencyMapV
     if (this._reduced === true) {
       this.ripple(this._view!.agencyMarkerColor.value!);
     }
-    this.animate();
+    //this.animate();
   }
 
   protected didUpdateVehicle(key: Value, value: Value): void {
@@ -138,19 +138,16 @@ export class AgencyMapViewController extends MapGraphicViewController<AgencyMapV
     this.unlinkVehicles();
   }
 
-  viewDidSetProjection(projection: MapProjection, view: AgencyMapView): void {
+  viewDidProject(viewContext: MapViewContext, view: AgencyMapView): void {
     const boundingBox = this._boundingBoxLink!.get().toAny() as unknown as AgencyBoundingBox | undefined;
     if (boundingBox) {
-      const [sw, ne] = projection.bounds;
+      const [sw, ne] = viewContext.projection.bounds;
       const culled = !(boundingBox.minLng <= ne.lng && sw.lng <= boundingBox.maxLng
                     && boundingBox.minLat <= ne.lat && sw.lat <= boundingBox.maxLat);
       view.setCulled(culled);
     } else {
       view.setCulled(true);
     }
-  }
-
-  viewDidCull(view: AgencyMapView): void {
     this.updateLevelOfDetail();
   }
 

@@ -32,6 +32,6 @@ export class VehicleMapView extends MapCircleView {
     return this._viewController;
   }
 
-  @MemberAnimator(Color, "inherit")
+  @MemberAnimator(Color, {inherit: true})
   vehicleMarkerColor: MemberAnimator<this, Color, AnyColor>;
 }

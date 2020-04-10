@@ -25,15 +25,11 @@ export class AgencyMapView extends MapGraphicView {
     return this._viewController;
   }
 
-  @MemberAnimator(Color, "inherit")
+  @MemberAnimator(Color, {inherit: true})
   agencyMarkerColor: MemberAnimator<this, Color, AnyColor>;
 
-  @MemberAnimator(Color, "inherit")
+  @MemberAnimator(Color, {inherit: true})
   vehicleMarkerColor: MemberAnimator<this, Color, AnyColor>;
-
-  protected onAnimate(t: number): void {
-    // don't compute auto hitBounds
-  }
 
   // protected onCull(): void {
   //   super.onCull();

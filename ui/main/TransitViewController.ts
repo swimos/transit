@@ -80,7 +80,7 @@ export class TransitViewController extends HtmlViewController {
   }
 
   protected createKpiStack(transitMapView: TransitMapView): HtmlView {
-    const kpiStack = HtmlView.fromTag("div")
+    const kpiStack = HtmlView.create("div")
         .key("kpiStack")
         .position("absolute")
         .right(0)
@@ -154,7 +154,7 @@ export class TransitViewController extends HtmlViewController {
   }
 
   protected createLogo(): SvgView {
-    const logo = SvgView.fromTag("svg").width(156).height(68).viewBox("0 0 156 68");
+    const logo = SvgView.create("svg").width(156).height(68).viewBox("0 0 156 68");
     logo.append("polygon").fill("#008ac5").points("38.262415 60.577147 45.7497674 67.9446512 41.4336392 66.3395349");
     logo.append("polygon").fill("#004868").points("30.6320304 56.7525259 35.7395349 55.9824716 41.4304178 66.3390957");
     logo.append("polygon").fill("#1db0ef").points("45.8577521 43.5549215 35.7395349 55.9813953 30.895331 54.807418");
