@@ -29,6 +29,7 @@ import swim.kernel.Kernel;
 import swim.server.ServerLoader;
 import swim.transit.agent.AgencyAgent;
 import swim.transit.agent.CountryAgent;
+import swim.transit.agent.MapTileAgent;
 import swim.transit.agent.StateAgent;
 import swim.transit.agent.VehicleAgent;
 import swim.transit.model.Agency;
@@ -49,6 +50,10 @@ public class TransitPlane extends AbstractPlane {
   @SwimAgent("vehicle")
   @SwimRoute("/vehicle/:country/:state/:agency/:id")
   AgentRoute<VehicleAgent> vehicleAgent;
+
+  @SwimAgent("map")
+  @SwimRoute("/map/:tile")
+  AgentRoute<MapTileAgent> mapTile;
 
   public static void main(String[] args) {
     final Kernel kernel = ServerLoader.loadServer();

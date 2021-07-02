@@ -20,9 +20,13 @@ import swim.api.agent.AbstractAgent;
 import swim.api.lane.CommandLane;
 import swim.api.lane.MapLane;
 import swim.api.lane.ValueLane;
+import swim.transit.model.SphericalMercator;
 import swim.transit.model.Vehicle;
+import swim.uri.Uri;
+import swim.uri.UriPath;
 
 public class VehicleAgent extends AbstractAgent {
+
   private long lastReportedTime = 0L;
 
   @SwimLane("vehicle")
@@ -55,10 +59,28 @@ public class VehicleAgent extends AbstractAgent {
       }
     }
     lastReportedTime = time;
+
+    updateMapTile(v);
+  }
+
+  void updateMapTile(Vehicle vehicle) {
+    final double lng = vehicle.getLongitude();
+    final double lat = vehicle.getLatitude();
+    final double x = SphericalMercator.projectLng(lng);
+    final double y = SphericalMercator.projectLat(lat);
+    final int tileX = (int) (x * (double) (1 << MAX_ZOOM));
+    final int tileY = (int) (y * (double) (1 << MAX_ZOOM));
+    final int tileZ = MAX_ZOOM;
+    final Uri tileUri = Uri.from(UriPath.from("/", "map", "/", tileX + "," + tileY + "," + tileZ));
+    System.out.println("updateMapTile lng: " + lng + "; lat: " + lat + "; x: " + x + "; y: " + y + "; tileX: " + tileX + "; tileY: " + tileY + "; tileZ: " + tileZ + "; tileUri: " + tileUri);
+    command(tileUri, Uri.parse("bubbleUp"), vehicle.toValue());
   }
 
   @Override
   public void didStart() {
     //System.out.println("Started Agent: " + nodeUri().toString());
   }
+
+  static final int MAX_ZOOM = 22;
+
 }
