@@ -15,9 +15,12 @@
 package swim.transit.agent;
 
 import swim.api.SwimLane;
+import swim.api.SwimTransient;
 import swim.api.agent.AbstractAgent;
 import swim.api.lane.CommandLane;
+import swim.api.lane.MapLane;
 import swim.structure.Value;
+import swim.transit.model.Vehicle;
 import swim.uri.Uri;
 import swim.uri.UriPath;
 
@@ -29,17 +32,24 @@ public class MapTileAgent extends AbstractAgent {
 
   Uri parentTileUri;
 
-  @SwimLane("bubbleUp")
-  public CommandLane<Value> bubbleUp = this.<Value>commandLane().onCommand((Value value) -> {
-    if (this.tileZ > 0) {
-      System.out.println("BubbleUp from " + nodeUri() + " to " + this.parentTileUri);
-      command(this.parentTileUri, Uri.parse("bubbleUp"), value);
-    }
+  @SwimTransient
+  @SwimLane("vehicles")
+  public MapLane<String, Vehicle> vehicles;
+
+  @SwimLane("updateVehicle")
+  public CommandLane<Vehicle> updateVehicle = this.<Vehicle>commandLane().onCommand((Vehicle vehicle) -> {
+    //System.out.println(nodeUri() + " updateVehicle: " + vehicle.getUri());
+    this.vehicles.put(vehicle.getUri(), vehicle);
+  });
+
+  @SwimLane("removeVehicle")
+  public CommandLane<String> removeVehicle = this.<String>commandLane().onCommand((String vehicleUri) -> {
+    //System.out.println(nodeUri() + " removeVehicle: " + vehicleUri);
+    this.vehicles.remove(vehicleUri);
   });
 
   @Override
   public void didStart() {
-    System.out.println("Started Agent " + nodeUri());
     final String[] coordinates = nodeUri().path().foot().toString().split(",");
     this.tileX = Integer.parseInt(coordinates[0]);
     this.tileY = Integer.parseInt(coordinates[1]);

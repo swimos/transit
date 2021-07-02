@@ -20,6 +20,7 @@ import swim.api.agent.AbstractAgent;
 import swim.api.lane.CommandLane;
 import swim.api.lane.MapLane;
 import swim.api.lane.ValueLane;
+import swim.structure.Text;
 import swim.transit.model.SphericalMercator;
 import swim.transit.model.Vehicle;
 import swim.uri.Uri;
@@ -30,7 +31,7 @@ public class VehicleAgent extends AbstractAgent {
   private long lastReportedTime = 0L;
 
   @SwimLane("vehicle")
-  public ValueLane<Vehicle> vehicle;
+  public ValueLane<Vehicle> vehicle = this.<Vehicle>valueLane().didSet(this::didSetVehicle);
 
   @SwimTransient
   @SwimLane("speeds")
@@ -59,21 +60,32 @@ public class VehicleAgent extends AbstractAgent {
       }
     }
     lastReportedTime = time;
-
-    updateMapTile(v);
   }
 
-  void updateMapTile(Vehicle vehicle) {
-    final double lng = vehicle.getLongitude();
-    final double lat = vehicle.getLatitude();
-    final double x = SphericalMercator.projectLng(lng);
-    final double y = SphericalMercator.projectLat(lat);
-    final int tileX = (int) (x * (double) (1 << MAX_ZOOM));
-    final int tileY = (int) (y * (double) (1 << MAX_ZOOM));
-    final int tileZ = MAX_ZOOM;
-    final Uri tileUri = Uri.from(UriPath.from("/", "map", "/", tileX + "," + tileY + "," + tileZ));
-    System.out.println("updateMapTile lng: " + lng + "; lat: " + lat + "; x: " + x + "; y: " + y + "; tileX: " + tileX + "; tileY: " + tileY + "; tileZ: " + tileZ + "; tileUri: " + tileUri);
-    command(tileUri, Uri.parse("bubbleUp"), vehicle.toValue());
+  void didSetVehicle(Vehicle newVehicle, Vehicle oldVehicle) {
+    final double oldLng = oldVehicle != null ? oldVehicle.getLongitude() : 0.0;
+    final double oldLat = oldVehicle != null ? oldVehicle.getLatitude() : 0.0;
+    final double oldX = oldVehicle != null ? SphericalMercator.projectLng(oldLng) : 0.0;
+    final double oldY = oldVehicle != null ? SphericalMercator.projectLat(oldLat) : 0.0;
+
+    final double newLng = newVehicle.getLongitude();
+    final double newLat = newVehicle.getLatitude();
+    final double newX = SphericalMercator.projectLng(newLng);
+    final double newY = SphericalMercator.projectLat(newLat);
+
+    for (int i = 0; i < ZOOM_LEVELS.length; i += 1) {
+      final int tileZ = ZOOM_LEVELS[i];
+      final int oldTileX = (int) (oldX * (double) (1 << tileZ));
+      final int oldTileY = (int) (oldY * (double) (1 << tileZ));
+      final int newTileX = (int) (newX * (double) (1 << tileZ));
+      final int newTileY = (int) (newY * (double) (1 << tileZ));
+      if (oldVehicle != null && (oldTileX != newTileX || oldTileY != newTileY)) {
+        final Uri oldTileUri = Uri.from(UriPath.from("/", "map", "/", oldTileX + "," + oldTileY + "," + tileZ));
+        command(oldTileUri, Uri.parse("removeVehicle"), Text.from(oldVehicle.getUri()));
+      }
+      final Uri newTileUri = Uri.from(UriPath.from("/", "map", "/", newTileX + "," + newTileY + "," + tileZ));
+      command(newTileUri, Uri.parse("updateVehicle"), newVehicle.toValue());
+    }
   }
 
   @Override
@@ -81,6 +93,6 @@ public class VehicleAgent extends AbstractAgent {
     //System.out.println("Started Agent: " + nodeUri().toString());
   }
 
-  static final int MAX_ZOOM = 22;
+  static final int[] ZOOM_LEVELS = {10, 15, 20};
 
 }
