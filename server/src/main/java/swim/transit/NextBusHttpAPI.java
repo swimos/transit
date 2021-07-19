@@ -62,7 +62,7 @@ public class NextBusHttpAPI {
   private static Routes getRoutes(Agency ag) {
     try {
       final URL url = new URL(String.format(
-          "http://webservices.nextbus.com//service/publicXMLFeed?command=routeList&a=%s", ag.getId()));
+          "https://retro.umoiq.com/service/publicXMLFeed?command=routeList&a=%s", ag.getId()));
       final Value allRoutes = parse(url);
       if (!allRoutes.isDefined()) {
         return null;

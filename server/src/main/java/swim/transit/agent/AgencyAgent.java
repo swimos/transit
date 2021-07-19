@@ -142,7 +142,7 @@ public class AgencyAgent extends AbstractAgent {
     this.pollVehicleInfo = asyncStage().task(new AbstractTask() {
 
       final Agency agency = ag;
-      final String url = String.format("http://webservices.nextbus.com//service/publicXMLFeed?command=vehicleLocations&a=%s&t=0",
+      final String url = String.format("https://retro.umoiq.com/service/publicXMLFeed?command=vehicleLocations&a=%s&t=0",
         ag.getId());
 
       @Override
