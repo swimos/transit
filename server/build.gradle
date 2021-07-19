@@ -28,13 +28,13 @@ ext.moduleArgs = []
 
 repositories {
   mavenCentral()
-  jcenter()
 }
 
 dependencies {
   implementation group: 'org.swimos', name: 'swim-xml', version: version
   api group: 'org.swimos', name: 'swim-api', version: version
   implementation group: 'org.swimos', name: 'swim-server', version: version
+  runtimeOnly group: 'org.swimos', name: 'swim-meta', version: version
 }
 
 afterEvaluate {

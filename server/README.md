@@ -11,7 +11,7 @@ These concepts share a strictly hierarchical relationship. Each vehicle falls un
 
 ### `VehicleAgent`
 
-NextBus Incorporated provides a publicly-available feed of transit data. The spec can be found [here](https://www.nextbus.com/xmlFeedDocs/NextBusXMLFeed.pdf), and it details the various XML responses that one can receive from specified REST endpoints.
+NextBus Incorporated provides a publicly-available feed of transit data. The spec can be found [here](https://retro.umoiq.com/xmlFeedDocs/NextBusXMLFeed.pdf), and it details the various XML responses that one can receive from specified REST endpoints.
 
 ## `NextBusHttpAPI` class
 
