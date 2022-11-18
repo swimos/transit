@@ -44,9 +44,9 @@ export class TransitViewController extends HtmlViewController {
     this._map = new mapboxgl.Map({
       container: view.node,
       style: "mapbox://styles/swimit/cjs5h20wh0fyf1gocidkpmcvm",
-      center: {lng: -122.419182, lat: 37.779301},
+      center: {lng: -97.922211, lat: 39.381266},
       pitch: 45,
-      zoom: 13,
+      zoom: 4,
     });
 
     const mapboxView = new MapboxView(this._map);
