@@ -1,4 +1,4 @@
-// Copyright 2015-2019 SWIM.AI inc.
+// Copyright 2015-2022 Swim.inc
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -27,17 +27,17 @@ import swim.actor.ActorSpace;
 import swim.actor.ActorSpaceDef;
 import swim.api.agent.AgentDef;
 import swim.api.plane.AbstractPlane;
-import swim.api.ref.SwimRef;
+import swim.api.ref.WarpRef;
 import swim.api.space.SpaceDef;
 import swim.collections.HashTrieMap;
 import swim.db.StoreSettings;
 import swim.kernel.Kernel;
 import swim.kernel.KernelException;
 import swim.kernel.KernelLoader;
-import swim.runtime.HostDef;
-import swim.runtime.NodeDef;
-import swim.runtime.PartDef;
-import swim.runtime.PartPredicate;
+import swim.system.HostDef;
+import swim.system.NodeDef;
+import swim.system.PartDef;
+import swim.system.PartPredicate;
 import swim.server.ServerLoader;
 import swim.store.StoreDef;
 import swim.store.db.DbStoreDef;
@@ -195,17 +195,17 @@ public class TransitPlane extends AbstractPlane {
     }
   }
 
-  private static void startAgencies(SwimRef swim) {
+  private static void startAgencies(WarpRef warp) {
     final List<Agency> agencies = loadAgencies();
     for (Agency agency : agencies) {
-      swim.command(agency.getUri(), "addInfo", agency.toValue());
+      warp.command(agency.getUri(), "addInfo", agency.toValue());
     }
     try {
       Thread.sleep(3000);
     } catch (InterruptedException e) {
 
     }
-    NextBusHttpAPI.sendRoutes(agencies, swim);
+    NextBusHttpAPI.sendRoutes(agencies, warp);
   }
 
   private static List<Agency> loadAgencies() {

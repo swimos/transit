@@ -1,4 +1,4 @@
-// Copyright 2015-2019 SWIM.AI inc.
+// Copyright 2015-2022 Swim.inc
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 open module swim.transit {
   requires swim.xml;
   requires transitive swim.api;
-  requires swim.server;
+  requires transitive swim.server;
 
   exports swim.transit;
   exports swim.transit.model;
