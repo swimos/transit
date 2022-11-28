@@ -57,7 +57,7 @@ public class MapTileAgent extends AbstractAgent {
     final int parentTileX = this.tileX / 2;
     final int parentTileY = this.tileY / 2;
     final int parentTileZ = this.tileZ - 1;
-    this.parentTileUri = Uri.from(UriPath.from("/", "map", "/", parentTileX + "," + parentTileY + "," + parentTileZ));
+    this.parentTileUri = Uri.create(UriPath.of("/", "map", "/", parentTileX + "," + parentTileY + "," + parentTileZ));
     System.out.println("Started MapTileAgent x: " + this.tileX + "; y: " + this.tileY + "; z: " + this.tileZ);
   }
 

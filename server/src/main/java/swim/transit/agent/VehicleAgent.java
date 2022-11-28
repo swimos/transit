@@ -80,10 +80,10 @@ public class VehicleAgent extends AbstractAgent {
       final int newTileX = (int) (newX * (double) (1 << tileZ));
       final int newTileY = (int) (newY * (double) (1 << tileZ));
       if (oldVehicle != null && (oldTileX != newTileX || oldTileY != newTileY)) {
-        final Uri oldTileUri = Uri.from(UriPath.from("/", "map", "/", oldTileX + "," + oldTileY + "," + tileZ));
+        final Uri oldTileUri = Uri.create(UriPath.of("/", "map", "/", oldTileX + "," + oldTileY + "," + tileZ));
         command(oldTileUri, Uri.parse("removeVehicle"), Text.from(oldVehicle.getUri()));
       }
-      final Uri newTileUri = Uri.from(UriPath.from("/", "map", "/", newTileX + "," + newTileY + "," + tileZ));
+      final Uri newTileUri = Uri.create(UriPath.of("/", "map", "/", newTileX + "," + newTileY + "," + tileZ));
       command(newTileUri, Uri.parse("updateVehicle"), newVehicle.toValue());
     }
   }
