@@ -1,4 +1,4 @@
-// Copyright 2015-2019 SWIM.AI inc.
+// Copyright 2015-2022 Swim.inc
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
-import swim.api.ref.SwimRef;
+import swim.api.ref.WarpRef;
 import swim.codec.Utf8;
 import swim.structure.Form;
 import swim.structure.Item;
@@ -37,25 +37,25 @@ public class NextBusHttpAPI {
 
   private NextBusHttpAPI() { }
 
-  public static void sendRoutes(List<Agency> agencies, SwimRef swim) {
+  public static void sendRoutes(List<Agency> agencies, WarpRef warp) {
     for (Agency agency: agencies) {
-      sendRoutes(agency, swim);
+      sendRoutes(agency, warp);
     }
   }
 
-  public static void sendVehicleInfo(String pollUrl, Agency ag, SwimRef swim) {
+  public static void sendVehicleInfo(String pollUrl, Agency ag, WarpRef warp) {
     final Vehicles vehicles = getVehicleLocations(pollUrl, ag);
     if (vehicles != null && vehicles.getVehicles().size() > 0) {
       final Value value = Form.forClass(Vehicles.class).mold(vehicles).toValue();
-      swim.command(ag.getUri(), "addVehicles", value);
+      warp.command(ag.getUri(), "addVehicles", value);
     }
   }
 
-  private static void sendRoutes(Agency agency, SwimRef swim) {
+  private static void sendRoutes(Agency agency, WarpRef warp) {
     final Routes routes = getRoutes(agency);
     if (routes != null && !routes.getRoutes().isEmpty()) {
       final Value value = Form.forClass(Routes.class).mold(routes).toValue();
-      swim.command(agency.getUri(), "addRoutes", value);
+      warp.command(agency.getUri(), "addRoutes", value);
     }
   }
 
@@ -157,7 +157,7 @@ public class NextBusHttpAPI {
       urlConnection = (HttpURLConnection) url.openConnection();
       urlConnection.setRequestProperty("Accept-Encoding", "gzip, deflate");
       final InputStream stream = new GZIPInputStream(urlConnection.getInputStream());
-      final Value configValue = Utf8.read(Xml.structureParser().documentParser(), stream);
+      final Value configValue = Utf8.read(stream, Xml.structureParser().documentParser());
       return configValue;
     } catch (Throwable e) {
       e.printStackTrace();

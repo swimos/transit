@@ -4,7 +4,7 @@
   "description": "Swim Transit Web UI",
   "homepage": "https://github.com/swimos/transit",
   "author": "Chris Sachs <chris@swim.ai>",
-  "copyright": "2015-2019 SWIM.AI inc.",
+  "copyright": "2015-2022 Swim.inc",
   "license": "Apache-2.0",
   "repository": "https://github.com/swimos/transit.git",
   "private": true,
@@ -15,12 +15,14 @@
     "@swim/ui": "3.10.2",
     "@swim/ux": "3.10.2",
     "@types/mapbox-gl": "0.51",
+    "path-parse": ">=1.0.7",
+    "kind-of": ">=6.0.3",
     "rollup": "1.16",
     "rollup-plugin-node-resolve": "5",
     "rollup-plugin-sourcemaps": "0",
     "tslib": "1",
     "tslint": "5",
-    "typescript": "3.5"
+    "typescript": "4.8"
   },
   "scripts": {
     "compile": "tsc -b",
