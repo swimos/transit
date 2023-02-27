@@ -152,7 +152,7 @@ afterEvaluate {
   }
 
   task packageDeb(type: Deb) {
-    maintainer = 'developer@swim.ai'
+    maintainer = 'developer@swim.inc'
 
     configurationFile("/etc/sysconfig/${project.name}")
     preInstall "addgroup --quiet --system ${project.name}"
