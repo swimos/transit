@@ -15,6 +15,8 @@
 package swim.transit.agent;
 
 import java.util.Iterator;
+import java.util.logging.Logger;
+
 import swim.api.SwimLane;
 import swim.api.SwimTransient;
 import swim.api.agent.AbstractAgent;
@@ -29,6 +31,7 @@ import swim.transit.model.Agency;
 import swim.transit.model.Vehicle;
 
 public class StateAgent extends AbstractAgent {
+  private static final Logger log = Logger.getLogger(StateAgent.class.getName());
   @SwimLane("count")
   public ValueLane<Value> count;
 
@@ -99,6 +102,6 @@ public class StateAgent extends AbstractAgent {
     vehicles.clear();
     agencyCount.clear();
     agencySpeed.clear();
-    System.out.println("Started Agent" + nodeUri().toString());
+    log.info(()-> String.format("Started Agent: %s", nodeUri()));
   }
 }

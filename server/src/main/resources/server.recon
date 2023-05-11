@@ -1,5 +1,6 @@
 @kernel(class: 'swim.store.db.DbStoreKernel', optional: true)
 @kernel(class: 'swim.reflect.ReflectKernel', optional: true)
+@kernel(class: "swim.transit.TransitUiRouter")
 
 transit: @fabric {
   @plane(class: "swim.transit.TransitPlane")
@@ -24,9 +25,8 @@ transit: @fabric {
   }
 }
 
-@web(port: 9002) {
+@web(port: 9001) {
   space: "transit"
-  documentRoot: "../ui/"
   @websocket {
     serverCompressionLevel: 0# -1 = default; 0 = off; 1-9 = deflate level
     clientCompressionLevel: 0# -1 = default; 0 = off; 1-9 = deflate level
