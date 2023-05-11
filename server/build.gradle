@@ -9,6 +9,11 @@ buildscript {
   }
 }
 
+plugins {
+  id 'com.google.cloud.tools.jib' version '3.3.1'
+}
+
+
 apply plugin: 'java-library'
 apply plugin: 'application'
 apply plugin: 'nebula.ospackage-application'
@@ -25,16 +30,17 @@ def javaVersion = System.getProperty('java.version').split('\\.')
 ext.jvmVersion = 11
 ext.useModules = !hasProperty('no-modules')
 ext.moduleArgs = []
+ext.swimVersion=project.property('swim.version')
 
 repositories {
   mavenCentral()
 }
 
 dependencies {
-  implementation group: 'org.swimos', name: 'swim-xml', version: version
-  api group: 'org.swimos', name: 'swim-api', version: version
-  implementation group: 'org.swimos', name: 'swim-server', version: version
-  runtimeOnly group: 'org.swimos', name: 'swim-meta', version: version
+  implementation group: 'org.swimos', name: 'swim-xml', version: swimVersion
+  api group: 'org.swimos', name: 'swim-api', version: swimVersion
+  implementation group: 'org.swimos', name: 'swim-server', version: swimVersion
+  runtimeOnly group: 'org.swimos', name: 'swim-meta', version: swimVersion
 }
 
 afterEvaluate {
@@ -82,6 +88,34 @@ afterEvaluate {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
     exclude '*module-info*'
+  }
+
+  jib {
+    from {
+      image = "openjdk:11"
+    }
+    to {
+      image = "nstream/demo-transit:${version}"
+      auth {
+        username = "$System.env.REGISTRY_USERNAME"
+        password = "$System.env.REGISTRY_PASSWORD"
+      }
+    }
+    container {
+      mainClass = mainClassName
+      ports = ['9001/tcp']
+      jvmFlags = ['-Dswim.config=/config/server.recon']
+    }
+    extraDirectories {
+      paths {
+        path {
+          // copies a single-file.xml
+          from = 'src/main/resources'
+          into = '/config'
+          includes = ['*.recon']
+        }
+      }
+    }
   }
 
   jar {
