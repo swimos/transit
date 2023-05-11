@@ -22,10 +22,7 @@ import swim.api.lane.MapLane;
 import swim.api.lane.ValueLane;
 import swim.transit.model.Vehicle;
 
-import java.util.logging.Logger;
-
 public class VehicleAgent extends AbstractAgent {
-  private static final Logger log = Logger.getLogger(VehicleAgent.class.getName());
   private long lastReportedTime = 0L;
 
   @SwimLane("vehicle")
@@ -62,6 +59,6 @@ public class VehicleAgent extends AbstractAgent {
 
   @Override
   public void didStart() {
-    log.info(()-> String.format("Started Agent: %s", nodeUri()));
+    //System.out.println("Started Agent: " + nodeUri().toString());
   }
 }

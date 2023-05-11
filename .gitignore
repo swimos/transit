@@ -7,4 +7,3 @@ build
 out
 server/ui
 dist/
-server/src/main/resources/ui

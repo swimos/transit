@@ -2,7 +2,6 @@
 
 @kernel(class: 'swim.store.db.DbStoreKernel', optional: true)
 @kernel(class: 'swim.reflect.ReflectKernel', optional: true)
-@kernel(class: "swim.transit.TransitUiRouter")
 
 transit: @fabric {
   @plane(class: "swim.transit.TransitPlane")

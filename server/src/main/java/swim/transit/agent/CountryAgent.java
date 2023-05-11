@@ -15,8 +15,6 @@
 package swim.transit.agent;
 
 import java.util.Iterator;
-import java.util.logging.Logger;
-
 import swim.api.SwimLane;
 import swim.api.agent.AbstractAgent;
 import swim.api.lane.CommandLane;
@@ -29,7 +27,6 @@ import swim.transit.model.Agency;
 import swim.uri.Uri;
 
 public class CountryAgent extends AbstractAgent {
-  private static final Logger log = Logger.getLogger(CountryAgent.class.getName());
   @SwimLane("count")
   public ValueLane<Value> count;
 
@@ -94,6 +91,6 @@ public class CountryAgent extends AbstractAgent {
   }
 
   public void didStart() {
-    log.info(()-> String.format("Started Agent: %s", nodeUri()));
+    System.out.println("Started Agent" + nodeUri().toString());
   }
 }
