@@ -16,6 +16,8 @@ package swim.transit.agent;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.logging.Logger;
+
 import swim.api.SwimLane;
 import swim.api.SwimTransient;
 import swim.api.agent.AbstractAgent;
@@ -35,6 +37,7 @@ import swim.transit.model.Vehicle;
 import swim.transit.model.Vehicles;
 
 public class AgencyAgent extends AbstractAgent {
+  private static final Logger log = Logger.getLogger(AgencyAgent.class.getName());
   @SwimTransient
   @SwimLane("vehicles")
   public MapLane<String, Vehicle> vehicles;
@@ -181,7 +184,7 @@ public class AgencyAgent extends AbstractAgent {
     vehicles.clear();
     vehiclesSpeed.set((float) 0);
     vehiclesCount.set(0);
-    System.out.println("Started Agent: " + nodeUri().toString());
+    log.info(() -> String.format("Starting Agent:%s", nodeUri()));
   }
 
   @Override

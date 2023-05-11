@@ -19,6 +19,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Logger;
+
 import swim.api.SwimAgent;
 import swim.api.SwimRoute;
 import swim.api.agent.AgentRoute;
@@ -34,6 +36,7 @@ import swim.transit.agent.VehicleAgent;
 import swim.transit.model.Agency;
 
 public class TransitPlane extends AbstractPlane {
+  private static final Logger log = Logger.getLogger(TransitPlane.class.getName());
   @SwimAgent("country")
   @SwimRoute("/country/:id")
   AgentRoute<CountryAgent> transitAgent;
@@ -55,7 +58,8 @@ public class TransitPlane extends AbstractPlane {
     final Space space = kernel.getSpace("transit");
 
     kernel.start();
-    System.out.println("Running TransitPlane...");
+    log.info("Running TransitPlane...");
+
 
     startAgencies(space);
 
@@ -90,6 +94,7 @@ public class TransitPlane extends AbstractPlane {
         }
       }
     } catch (Throwable t) {
+      log.severe(()->String.format("Exception thrown\n%s", t));
     } finally {
       try {
         if (is != null) {

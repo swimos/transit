@@ -20,6 +20,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 import swim.api.ref.WarpRef;
 import swim.codec.Utf8;
@@ -34,7 +35,7 @@ import swim.transit.model.Vehicles;
 import swim.xml.Xml;
 
 public class NextBusHttpAPI {
-
+  private static final Logger log = Logger.getLogger(NextBusHttpAPI.class.getName());
   private NextBusHttpAPI() { }
 
   public static void sendRoutes(List<Agency> agencies, WarpRef warp) {
@@ -79,6 +80,7 @@ public class NextBusHttpAPI {
       }
       return routes;
     } catch (Exception e) {
+      log.severe(() -> String.format("Exception thrown:\n%s", e));
     }
     return null;
   }
@@ -139,6 +141,7 @@ public class NextBusHttpAPI {
       }
       return vehicles;
     } catch (Exception e) {
+      log.severe(() -> String.format("Exception thrown:\n%s", e));
     }
     return null;
   }
@@ -160,7 +163,7 @@ public class NextBusHttpAPI {
       final Value configValue = Utf8.read(stream, Xml.structureParser().documentParser());
       return configValue;
     } catch (Throwable e) {
-      e.printStackTrace();
+      log.severe(() -> String.format("Exception thrown:\n%s", e));
     }
     return Value.absent();
   }
