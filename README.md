@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-* [Install JDK 9+](https://www.oracle.com/technetwork/java/javase/downloads/index.html).
+* [Install JDK 11+](https://www.oracle.com/technetwork/java/javase/downloads/index.html).
   * Ensure that your `JAVA_HOME` environment variable is pointed to your Java installation location.
   * Ensure that your `PATH` includes `$JAVA_HOME`.
 
@@ -28,7 +28,7 @@ Execute the command `./run.sh` from a console pointed to the application's home 
    ```
 
 ## View the UI
-Open the following URL on your browser: http://localhost:9002.
+Open the following URL on your browser: http://localhost:9001.
 
 ## Run as a Fabric
 

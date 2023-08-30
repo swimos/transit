@@ -1,13 +1,25 @@
 # Server B
 
-@kernel(class: 'swim.store.db.DbStoreKernel', optional: true)
-@kernel(class: 'swim.reflect.ReflectKernel', optional: true)
 @kernel(class: "swim.transit.TransitUiRouter")
 
 transit: @fabric {
   @plane(class: "swim.transit.TransitPlane")
-  @store {
-    path: "/tmp/swim-transit-b"
+
+  @node {
+    pattern: "/country/:id"
+    @agent(class: "swim.transit.agent.CountryAgent")
+  }
+  @node {
+    pattern: "/state/:country/:state"
+    @agent(class: "swim.transit.agent.StateAgent")
+  }
+  @node {
+    pattern: "/agency/:country/:state/:id"
+    @agent(class: "swim.transit.agent.AgencyAgent")
+  }
+  @node {
+    pattern: "/vehicle/:country/:state/:agency/:id"
+    @agent(class: "swim.transit.agent.VehicleAgent")
   }
 
   @mesh {

@@ -21,37 +21,15 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
-import swim.api.SwimAgent;
-import swim.api.SwimRoute;
-import swim.api.agent.AgentRoute;
 import swim.api.plane.AbstractPlane;
 import swim.api.ref.WarpRef;
 import swim.api.space.Space;
 import swim.kernel.Kernel;
 import swim.server.ServerLoader;
-import swim.transit.agent.AgencyAgent;
-import swim.transit.agent.CountryAgent;
-import swim.transit.agent.StateAgent;
-import swim.transit.agent.VehicleAgent;
 import swim.transit.model.Agency;
 
 public class TransitPlane extends AbstractPlane {
   private static final Logger log = Logger.getLogger(TransitPlane.class.getName());
-  @SwimAgent("country")
-  @SwimRoute("/country/:id")
-  AgentRoute<CountryAgent> transitAgent;
-
-  @SwimAgent("state")
-  @SwimRoute("/state/:country/:state")
-  AgentRoute<StateAgent> stateAgent;
-
-  @SwimAgent("agency")
-  @SwimRoute("/agency/:country/:state/:id")
-  AgentRoute<AgencyAgent> agencyAgent;
-
-  @SwimAgent("vehicle")
-  @SwimRoute("/vehicle/:country/:state/:agency/:id")
-  AgentRoute<VehicleAgent> vehicleAgent;
 
   public static void main(String[] args) {
     final Kernel kernel = ServerLoader.loadServer();

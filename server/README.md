@@ -2,7 +2,7 @@
 
 Four different high-level concepts are fundamental to this application: vehicles, agencies, states, and countries.
 
-These concepts share a strictly hierarchical relationship. Each vehicle falls under exactly one (of 67 possible) agencies. Each agency likewise falls under exactly one state, and each state falls under exactly one country.
+These concepts share a strictly hierarchical relationship. Each vehicle falls under exactly one agency. Each agency likewise falls under exactly one state, and each state falls under exactly one country.
 
 
 
