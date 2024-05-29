@@ -43,7 +43,7 @@ export class TransitViewController extends HtmlViewController {
   didSetView(view: HtmlView): void {
     this._map = new mapboxgl.Map({
       container: view.node,
-      style: "mapbox://styles/swimit/cjs5h20wh0fyf1gocidkpmcvm",
+      style: "mapbox://styles/mapbox/dark-v10",
       center: {lng: -97.922211, lat: 39.381266},
       pitch: 45,
       zoom: 4,
